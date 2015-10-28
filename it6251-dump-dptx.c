@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <linux/i2c.h>
 #include <linux/i2c-dev.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
@@ -76,7 +77,7 @@ static int i2c_write_byte(uint8_t dev_addr,
 			  uint8_t reg_addr, uint8_t val) {
 	struct i2c_rdwr_ioctl_data session;
 	struct i2c_msg messages[1];
-	char data_buf[2];
+	uint8_t data_buf[2];
 	int i2cfd;
 
 	i2cfd = open(I2C_FILENAME, O_RDWR);
@@ -121,12 +122,12 @@ static int i2c_read_byte(uint8_t dev_addr, uint8_t reg_addr) {
 	messages[0].addr = dev_addr;
 	messages[0].flags = 0;
 	messages[0].len = sizeof(reg_addr);
-	messages[0].buf = (char *)&reg_addr;
+	messages[0].buf = &reg_addr;
 
 	messages[1].addr = dev_addr;
 	messages[1].flags = I2C_M_RD;
 	messages[1].len = sizeof(ret);
-	messages[1].buf = (char *)&ret;
+	messages[1].buf = &ret;
 
 	session.msgs = messages;
 	session.nmsgs = 2;
