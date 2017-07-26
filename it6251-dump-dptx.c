@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <linux/i2c.h>
 #include <linux/i2c-dev.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
@@ -11,6 +10,10 @@
 #include <strings.h>
 #include <string.h>
 #include <ctype.h>
+
+#ifndef I2C_FUNC_I2C
+#include <linux/i2c.h>
+#endif
 
 #define I2C_FILENAME "/dev/i2c-2"
 #define DP_I2C 0x5c
